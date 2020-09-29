@@ -1,9 +1,9 @@
 {
-    "name": "DoroshAlex/laravel-vote",
+    "name": "dorosh-alex/laravel-vote",
     "description": "The package helps you to add user based vote system to your model",
     "authors": [
         {
-            "name": "DoroshAlex",
+            "name": "Dorosh Alex",
             "email": "dorosh.alexandr@gmail.com"
         }
     ],
@@ -16,12 +16,12 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Jcc\\LaravelVote\\": "src"
+            "DoroshAlex\\LaravelVote\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Jcc\\LaravelVote\\Tests\\": "tests"
+            "DoroshAlex\\LaravelVote\\Tests\\": "tests"
         }
     },
     "extra": {

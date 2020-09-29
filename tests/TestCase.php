@@ -1,6 +1,6 @@
 <?php
 
-namespace Jcc\LaravelVote\Tests;
+namespace DoroshAlex\LaravelVote\Tests;
 
 use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 
