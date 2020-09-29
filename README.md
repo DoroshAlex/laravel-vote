@@ -9,25 +9,25 @@
 You can install the package using Composer:
 
 ```sh
-$ composer require AlexDorosh/laravel-vote -vvv
+$ composer require dorosh-alex/laravel-vote -vvv
 ```
 
 Then add the service provider to `config/app.php`:
 
 ```php
-AlexDorosh\LaravelVote\VoteServiceProvider::class
+DoroshAlex\LaravelVote\VoteServiceProvider::class
 ```
 
 Publish the migrations file:
 
 ```sh
-$ php artisan vendor:publish --provider="AlexDorosh\LaravelVote\VoteServiceProvider" --tag="migrations"
+$ php artisan vendor:publish --provider="DoroshAlex\LaravelVote\VoteServiceProvider" --tag="migrations"
 ```
 
 Finally, use VoteTrait in User model:
 
 ```php
-use AlexDorosh\LaravelVote\Vote;
+use DoroshAlex\LaravelVote\Vote;
 
 class User extends Model
 {
@@ -38,7 +38,7 @@ class User extends Model
 Or use CanBeVoted in Comment model:
 
 ```php
-use AlexDorosh\LaravelVote\CanBeVoted;
+use DoroshAlex\LaravelVote\CanBeVoted;
 
 class Comment extends Model
 {
