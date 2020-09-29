@@ -16,7 +16,9 @@ class CreateVotesTable extends Migration
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('votable_id');
             $table->string('votable_type')->index();
-            $table->enum('type', ['up_vote', 'down_vote'])->default('up_vote');
+            $table->tinyInteger('type')->default(1);
+
+            $table->primary(['user_id', 'votable_id']);
 
             $table->timestamps();
         });

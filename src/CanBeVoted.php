@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Jcc\LaravelVote;
+namespace DoroshAlex\LaravelVote;
 
 trait CanBeVoted
 {
@@ -24,7 +24,7 @@ trait CanBeVoted
     {
         return $this->voters->contains($user);
     }
-	
+
     /**
      * Return the total vote score
      *
@@ -32,9 +32,7 @@ trait CanBeVoted
      */
     public function countTotalVotes()
     {
-        $downVote = $this->countVoters('down_vote');
-        $upVotes = $this->countVoters('up_vote');
-        return $upVotes - $downVote;
+        return $this->countVotesSum();
     }
 
     /**
@@ -44,7 +42,7 @@ trait CanBeVoted
      */
     public function countUpVoters()
     {
-        return $this->countVoters('up_vote');
+        return $this->countVoters(1);
     }
 
     /**
@@ -54,7 +52,7 @@ trait CanBeVoted
      */
     public function countDownVoters()
     {
-        return $this->countVoters('down_vote');
+        return $this->countVoters(-1);
     }
 
     /**
@@ -71,6 +69,22 @@ trait CanBeVoted
         if(!is_null($type)) $voters->wherePivot('type', $type);
 
         return $voters->count();
+    }
+
+    /**
+     * Count the number of voters.
+     *
+     * @param  string $type
+     *
+     * @return int
+     */
+    public function countVotesSum($type = null)
+    {
+        $voters = $this->voters();
+
+        if(!is_null($type)) $voters->wherePivot('type', $type);
+
+        return $voters->sum();
     }
 
     /**

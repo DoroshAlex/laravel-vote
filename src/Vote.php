@@ -9,7 +9,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Jcc\LaravelVote;
+namespace DoroshAlex\LaravelVote;
 
 trait Vote
 {
@@ -40,7 +40,7 @@ trait Vote
     {
         $this->cancelVote($item);
 
-        return $this->vote($item, 'down_vote');
+        return $this->vote($item, -1);
     }
 
     /**
@@ -50,7 +50,7 @@ trait Vote
      * @param  string $type
      * @return boolean
      */
-    public function vote($item, $type = 'up_vote')
+    public function vote($item, $type = 1)
     {
         $items = array_fill_keys((array) $this->checkVoteItem($item), ['type' => $type]);
 
@@ -72,7 +72,7 @@ trait Vote
     }
 
     /**
-     * Determine whether the type of 'up_vote' item exist
+     * Determine whether the type of 1 item exist
      *
      * @param $item
      *
@@ -80,11 +80,11 @@ trait Vote
      */
     public function hasUpVoted($item)
     {
-        return $this->hasVoted($item, 'up_vote');
+        return $this->hasVoted($item, 1);
     }
 
     /**
-     * Determine whether the type of 'down_vote' item exist
+     * Determine whether the type of -1 item exist
      *
      * @param $item
      *
@@ -92,7 +92,7 @@ trait Vote
      */
     public function hasDownVoted($item)
     {
-        return $this->hasVoted($item, 'down_vote');
+        return $this->hasVoted($item, -1);
     }
 
     /**

@@ -2,32 +2,32 @@
 
 :tada: This package helps you to add user based vote system to your model.
 
-> This project code is basically the same as [laravel-follow](https://github.com/overtrue/laravel-follow).
+>
 
 ## Installation
 
 You can install the package using Composer:
 
 ```sh
-$ composer require jcc/laravel-vote -vvv
+$ composer require AlexDorosh/laravel-vote -vvv
 ```
 
 Then add the service provider to `config/app.php`:
 
 ```php
-Jcc\LaravelVote\VoteServiceProvider::class
+AlexDorosh\LaravelVote\VoteServiceProvider::class
 ```
 
 Publish the migrations file:
 
 ```sh
-$ php artisan vendor:publish --provider="Jcc\LaravelVote\VoteServiceProvider" --tag="migrations"
+$ php artisan vendor:publish --provider="AlexDorosh\LaravelVote\VoteServiceProvider" --tag="migrations"
 ```
 
 Finally, use VoteTrait in User model:
 
 ```php
-use Jcc\LaravelVote\Vote;
+use AlexDorosh\LaravelVote\Vote;
 
 class User extends Model
 {
@@ -38,7 +38,7 @@ class User extends Model
 Or use CanBeVoted in Comment model:
 
 ```php
-use Jcc\LaravelVote\CanBeVoted;
+use AlexDorosh\LaravelVote\CanBeVoted;
 
 class Comment extends Model
 {

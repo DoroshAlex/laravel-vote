@@ -1,10 +1,10 @@
 {
-    "name": "jcc/laravel-vote",
+    "name": "DoroshAlex/laravel-vote",
     "description": "The package helps you to add user based vote system to your model",
     "authors": [
         {
-            "name": "jcc",
-            "email": "changejian@gmail.com"
+            "name": "DoroshAlex",
+            "email": "dorosh.alexandr@gmail.com"
         }
     ],
     "require": {
@@ -27,7 +27,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Jcc\\LaravelVote\\VoteServiceProvider"
+                "DoroshAlex\\LaravelVote\\VoteServiceProvider"
             ]
         }
     },
