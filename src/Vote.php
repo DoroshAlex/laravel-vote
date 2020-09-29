@@ -11,6 +11,8 @@
 
 namespace DoroshAlex\LaravelVote;
 
+use Illuminate\Support\Facades\DB;
+
 trait Vote
 {
     protected $voteRelation = __CLASS__;
@@ -24,8 +26,6 @@ trait Vote
      */
     public function upVote($item)
     {
-        $this->cancelVote($item);
-
         return $this->vote($item);
     }
 
@@ -38,8 +38,6 @@ trait Vote
      */
     public function downVote($item)
     {
-        $this->cancelVote($item);
-
         return $this->vote($item, -1);
     }
 
@@ -52,9 +50,27 @@ trait Vote
      */
     public function vote($item, $type = 1)
     {
-        $items = array_fill_keys((array) $this->checkVoteItem($item), ['type' => $type]);
+        $vote = $this->getVoteItem($item);
 
-        return $this->votedItems()->sync($items, false);
+        if($vote) {
+            if($vote->type != $type) {
+                return DB::table($this->getVoteTable())
+                    ->where('user_id', $this->id)
+                    ->where('votable_id', $item->id)
+                    ->where('votable_type', get_class($item))
+                    ->update(['type' => $type, 'updated_at' => now()]);
+            }
+        } else {
+            return DB::table($this->getVoteTable())
+                ->insert([
+                    'user_id' => $this->id,
+                    'votable_id' => $item->id,
+                    'votable_type' => get_class($item),
+                    'type' => $type,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+        }
     }
 
     /**
@@ -66,9 +82,16 @@ trait Vote
      */
     public function cancelVote($item)
     {
-        $item = $this->checkVoteItem($item);
+        $vote = $this->getVoteItem($item);
 
-        return $this->votedItems()->detach((array)$item);
+        if($vote) {
+            return DB::table($this->getVoteTable())
+                ->where('user_id', $vote->user_id)
+                ->where('votable_id', $vote->votable_id)
+                ->where('votable_type', $vote->votable_type)
+                ->delete();
+        }
+
     }
 
     /**
@@ -105,13 +128,37 @@ trait Vote
      */
     public function hasVoted($item, $type = null)
     {
-        $item = $this->checkVoteItem($item);
+        $vote = $this->getVoteItem($item);
 
-        $votedItems = $this->votedItems();
+        if($vote) {
+            return $type ? $vote->type === $type : true;
+        }
 
-        if(!is_null($type)) $votedItems->wherePivot('type', $type);
+        return false;
+    }
 
-        return $votedItems->get()->contains($item);
+    /**
+     * getVoteItem
+     *
+     * @param mixed $item
+     * @access public
+     * @return mixed
+     */
+    public function getVoteItem($item)
+    {
+        return DB::table($this->getVoteTable())
+            ->where('user_id', $this->id)
+            ->where('votable_id', $item->id)
+            ->where('votable_type', get_class($item))
+            ->limit(1)
+            ->first();
+    }
+
+    public function getVote($item)
+    {
+        $vote = $this->getVoteItem($item);
+
+        return $vote ? $vote->type : null;
     }
 
     /**
@@ -127,7 +174,7 @@ trait Vote
             $this->setVoteRelation($class);
         }
 
-        return $this->morphedByMany($this->voteRelation, 'votable', $this->vote_table ?: 'votes')->withTimestamps();
+        return $this->morphedByMany($this->voteRelation, 'votable', $this->getVoteTable())->withTimestamps();
     }
 
     /**
@@ -155,5 +202,10 @@ trait Vote
     protected function setVoteRelation($class)
     {
         return $this->voteRelation = $class;
+    }
+
+    protected function getVoteTable()
+    {
+        return $this->vote_table ?: 'votes';
     }
 }

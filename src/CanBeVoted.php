@@ -11,6 +11,8 @@
 
 namespace DoroshAlex\LaravelVote;
 
+use Illuminate\Support\Facades\DB;
+
 trait CanBeVoted
 {
     /**
@@ -80,11 +82,11 @@ trait CanBeVoted
      */
     public function countVotesSum($type = null)
     {
-        $voters = $this->voters();
-
-        if(!is_null($type)) $voters->wherePivot('type', $type);
-
-        return $voters->sum('type');
+        return (int) DB::table($this->getVoteTable())
+            ->select(DB::raw('SUM(type) as votes_sum'))
+            ->where('votable_id', $this->id)
+            ->where('votable_type', get_class($this))
+            ->first()->votes_sum;
     }
 
     /**
@@ -97,5 +99,10 @@ trait CanBeVoted
         $property = property_exists($this, 'vote') ? $this->vote : __CLASS__;
 
         return $this->morphToMany($property, 'votable', $this->vote_table ?: 'votes');
+    }
+
+    protected function getVoteTable()
+    {
+        return $this->vote_table ?: 'votes';
     }
 }
