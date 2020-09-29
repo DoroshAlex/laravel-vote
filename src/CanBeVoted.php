@@ -84,7 +84,7 @@ trait CanBeVoted
 
         if(!is_null($type)) $voters->wherePivot('type', $type);
 
-        return $voters->sum();
+        return $voters->sum('type');
     }
 
     /**
